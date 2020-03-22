@@ -3,6 +3,8 @@ package com.fazua.system.productionline;
 import com.google.common.base.Preconditions;
 
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerialNumber,Validation16BitsShortSerialNumber {
 
@@ -13,6 +15,7 @@ public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerial
     private Motor motor;
     private DrivePack drivePack;
     private SupportLevel supportLevel;
+    private Timer timer = null;
 
 
     // Constructor
@@ -46,41 +49,38 @@ public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerial
 
     @Override
     public void off() {
-        System.out.println(" Remote OFF button pressed . Shutting down the Evation system ....");
-        System.out.println();
-
-        drivePack.deactivate();
-
-        this.state = State.OFF;
-        System.out.println("Evation System Shut down complete.");
-        System.out.println();
-
+            timer = new Timer();
+            timer.schedule(new shutDownTask(),4000,4000);
+            timer.purge();
     }
 
     @Override
     public void increaseSupportLevel(){
 
-        SupportLevel current = getSupportLevel();
 
-        if(current == SupportLevel.WHITE){
-            setSupportLevel(SupportLevel.BLUE);
+            SupportLevel current = getSupportLevel();
+
+            if(current == SupportLevel.WHITE){
+                setSupportLevel(SupportLevel.BLUE);
+            }
+
+            if(current == SupportLevel.WHITE){
+                setSupportLevel(SupportLevel.GREEN);
+            }
+
+            if(current == SupportLevel.GREEN){
+                setSupportLevel(SupportLevel.PINK);
+            }
+
+            if(current == SupportLevel.PINK){
+                setSupportLevel(SupportLevel.WHITE);
+            }
+
+            System.out.println("Increasing Support Level from " + current + " to " + getSupportLevel());
+            System.out.println();
         }
 
-        if(current == SupportLevel.WHITE){
-            setSupportLevel(SupportLevel.GREEN);
-        }
 
-        if(current == SupportLevel.GREEN){
-            setSupportLevel(SupportLevel.PINK);
-        }
-
-        if(current == SupportLevel.PINK){
-            setSupportLevel(SupportLevel.WHITE);
-        }
-
-        System.out.println("Increasing Support Level from " + current + " to " + getSupportLevel());
-        System.out.println();
-    }
 
 
     public void initializeSystem() {
@@ -98,6 +98,9 @@ public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerial
             // Create Motor object
             motor = new Motor(motorSerialNumber);
 
+            System.out.println("**** Enter Bottom Bracket Specification Below ******");
+            System.out.println();
+
             System.out.print("Enter BOTTOM BRACKET serial number : ");
             int bottomBracketSno = in.nextInt();
             System.out.println();
@@ -107,6 +110,9 @@ public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerial
             System.out.println();
 
             BottomBracket bottomBracket = new BottomBracket(bottomBracketSno,bottomBracketTorqueSensor);
+
+            System.out.println("**** Enter Drive Pack Specification Below ******");
+            System.out.println();
 
             System.out.print("Enter drive pack serial number : ");
             int drivePackSno = in.nextInt();
@@ -168,6 +174,31 @@ public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerial
                 '}';
     }
 
+
+    class shutDownTask extends TimerTask {
+
+        @Override
+        public void run() {
+
+            if(!drivePack.getState().equals(State.OFF)){
+
+                try {
+                    Thread.sleep(6000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("Remote OFF button pressed . Shutting down the Evation system ....");
+                System.out.println();
+                drivePack.deactivate();
+
+                System.out.println("Evation System Shut down complete.");
+                System.out.println();
+                timer.cancel();
+                System.exit(0);
+            }
+        }
+    }
 
 
 }

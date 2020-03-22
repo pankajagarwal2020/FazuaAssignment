@@ -3,6 +3,9 @@ package com.fazua.system.productionline;
 
 import com.google.common.base.Preconditions;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSoftwareversion {
 
     private final int serialNumber;
@@ -11,6 +14,8 @@ public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSo
     private SupportLevel level;
     private Motor motor;
     private BottomBracket bottomBracket;
+    private Timer timer = null;
+
 
 
     // Constructor
@@ -26,6 +31,7 @@ public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSo
 
     public void activate() {
 
+
         printSpecification();
         System.out.println();
 
@@ -35,8 +41,9 @@ public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSo
         System.out.println();
 
         bottomBracket.activate();
-        // start motor
-        startMotor();
+        timer = new Timer();
+        timer.schedule(new startMotorTask(),0,4000); // schedule to run for a period of 4s
+        timer.purge();
     }
 
 
@@ -58,6 +65,12 @@ public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSo
         System.out.println("Motor current state :" + motor.getState());
         System.out.println();
 
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         System.out.println(" *** OUTPUT RESULT ****");
         System.out.println();
 
@@ -74,6 +87,8 @@ public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSo
         }
 
         System.out.println();
+
+
     }
 
     public void printSpecification() {
@@ -146,14 +161,20 @@ public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSo
 
     // Getters and Setters
 
-
-
-    public void setBottomBracket(BottomBracket bottomBracket) {
-        this.bottomBracket = bottomBracket;
-    }
+    //Getters
 
     public SupportLevel getLevel() {
         return level;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    // setters
+
+    public void setBottomBracket(BottomBracket bottomBracket) {
+        this.bottomBracket = bottomBracket;
     }
 
     public void setLevel(SupportLevel level) {
@@ -203,4 +224,30 @@ public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSo
 
         return true;
     }
+
+    class startMotorTask extends TimerTask{
+
+        @Override
+        public void run() {
+            long time = System.currentTimeMillis();
+            startMotor();
+            time = System.currentTimeMillis() - time;
+            timer.cancel();
+
+
+            System.out.println("Time period for which motor ran :" + time +" milliseconds");
+            System.out.println();
+
+            System.out.println("Shutting down motor ");
+            System.out.println();
+
+            motor.shutDownMotor();
+
+
+
+
+        }
+    }
+
+
 }

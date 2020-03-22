@@ -12,6 +12,6 @@ public class Constants {
     public static final int MINIMUM_POWER = 80;
     public static final int MAXIMUM_POWER = 150;
 
-    public static final int SIMULATIONS_ITERATIONS = 1000;
+    public static final int SIMULATIONS_ITERATIONS = 10;
 
 }

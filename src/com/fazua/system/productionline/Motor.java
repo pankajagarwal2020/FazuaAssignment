@@ -3,6 +3,7 @@ package com.fazua.system.productionline;
 import com.google.common.base.Preconditions;
 
 import java.util.Random;
+import java.util.TimerTask;
 
 public class Motor implements Validation16BitsShortSerialNumber {
 
@@ -13,7 +14,7 @@ public class Motor implements Validation16BitsShortSerialNumber {
 
     private int factor ;
 
-    private int motorPower;
+    private volatile int motorPower;
 
 
     // Constructor
@@ -65,11 +66,18 @@ public class Motor implements Validation16BitsShortSerialNumber {
     // shut down motor
     public void shutDownMotor(){
 
-        this.state = State.OFF;
-        motorPower = 0;
+        if(!this.state.equals(State.OFF)){
 
-        System.out.println("Motor shut down complete");
-        System.out.println();
+            this.state = State.OFF;
+            motorPower = 0;
+
+            System.out.println("Motor shut down complete");
+            System.out.println();
+        }else{
+
+            System.out.println("Motor already in a shut state");
+            System.out.println();
+        }
     }
 
     // calculate random generated motor power
@@ -109,4 +117,5 @@ public class Motor implements Validation16BitsShortSerialNumber {
 
         return true;
     }
+
 }
