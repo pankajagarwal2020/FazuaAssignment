@@ -12,4 +12,5 @@
  <li> Main package - com.fazua.system.productionline</li>
  <li> Test Package - com.fazua.system.tests</li>
  <li>Main Method - eBikeMainSimulationApp</li>
+ <li> Class Diagram built with Visual Paradigm Community Edition</li>
  
