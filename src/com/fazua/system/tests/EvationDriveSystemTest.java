@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EvationDriveSystemTest {
 
 
@@ -124,7 +124,7 @@ public class EvationDriveSystemTest {
 
         int motorPower = motor.runMotor(SupportLevel.WHITE);
         System.out.println("motorPower = " + motorPower);
-        assertEquals(motorPower > 85 && motorPower < 140, true, "Evation Drive System Failed ");
+        assertEquals(motorPower > 85 && motorPower < 140, true, "Evation Drive System Failed as motor power not between 85 and 140 ");
     }
 
 
