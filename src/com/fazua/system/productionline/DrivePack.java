@@ -21,7 +21,7 @@ public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSo
     // Constructor
     public DrivePack(int serialNumber, double softwareVersion) {
 
-        validateSpecification(serialNumber);
+        validate32bitSpecification(serialNumber);
         validateSpecification(softwareVersion);
         this.serialNumber = serialNumber;
         this.softwareVersion = versionAs16Bit(softwareVersion);
@@ -213,7 +213,7 @@ public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSo
     }
 
     @Override
-    public boolean validateSpecification(int serialNumber) {
+    public boolean validate32bitSpecification(int serialNumber) {
 
         Preconditions.checkArgument(serialNumber > 0 && serialNumber < Integer.MAX_VALUE,
                 "Cannot start Simulation as Drive Pack serial number is not a valid positive 32 bit number"

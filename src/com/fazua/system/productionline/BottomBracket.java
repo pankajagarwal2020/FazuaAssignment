@@ -17,7 +17,7 @@ public class BottomBracket implements Validation32BitsIntegerSerialNumber {
     public BottomBracket(int serialNumber, String torqueSensorSerialNumber) {
 
 
-        validateSpecification(serialNumber);
+        validate32bitSpecification(serialNumber);
 
         validateTorqueSerialNumber(torqueSensorSerialNumber);
 
@@ -29,7 +29,7 @@ public class BottomBracket implements Validation32BitsIntegerSerialNumber {
         this.isTorqueSensorSerialAscii12Digits = isTorqueSensorSerialAscii12Digits(torqueSensorSerialNumber);
     }
 
-    private boolean validateTorqueSerialNumber(String torqueSensorSerialNumber) {
+    public boolean validateTorqueSerialNumber(String torqueSensorSerialNumber) {
 
         Preconditions.checkArgument(checkTorqueSensorSerialAscii(torqueSensorSerialNumber),
                 "Simulation cannot be started as torque sensor serial number can not be converted to ASCII format");
@@ -116,7 +116,7 @@ public class BottomBracket implements Validation32BitsIntegerSerialNumber {
     }
 
     @Override
-    public boolean validateSpecification(int serialNumber) {
+    public boolean validate32bitSpecification(int serialNumber) {
         Preconditions.checkArgument(serialNumber > 0 && serialNumber < Integer.MAX_VALUE
                 ,"Simulation cannot be started .Not a valid positive 32 bit serial number(between 1 to 0x7fffffff) for Bottom Bracket");
 

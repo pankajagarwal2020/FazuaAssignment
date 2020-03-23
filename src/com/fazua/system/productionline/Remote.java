@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerialNumber,Validation16BitsShortSerialNumber {
+public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerialNumber,Validation16BitsShortSerialNumber{
 
 
     private int serialNumber;
@@ -20,8 +20,8 @@ public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerial
 
     // Constructor
     public Remote(int serialNumber, short HMIBoardSerialNumber) {
-        validateSpecification(serialNumber);
-        validateSpecification(HMIBoardSerialNumber);
+        validate32bitSpecification(serialNumber);
+        validate16bitSpecification(HMIBoardSerialNumber);
 
         this.serialNumber = serialNumber;
         this.HMIBoardSerialNumber = HMIBoardSerialNumber;
@@ -141,7 +141,7 @@ public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerial
     }
 
     @Override
-    public boolean validateSpecification(int serialNumber) {
+    public boolean validate32bitSpecification(int serialNumber) {
         Preconditions.checkArgument(serialNumber > 0 && serialNumber < Integer.MAX_VALUE,
                 "Cannot start Simulation.Not a valid positive serial number(between 1 to 0x7fffffff) for Remote");
 
@@ -153,7 +153,7 @@ public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerial
     }
 
     @Override
-    public boolean validateSpecification(short HMIBoardSerialNumber) {
+    public boolean validate16bitSpecification(short HMIBoardSerialNumber) {
 
         Preconditions.checkArgument(HMIBoardSerialNumber > 0 && HMIBoardSerialNumber < Short.MAX_VALUE,
                 "Cannot start Simulation.Not a valid positive HMIBoard serial number(between 1 to 32767) for Remote");
@@ -173,6 +173,8 @@ public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerial
                 ", supportLevel=" + supportLevel +
                 '}';
     }
+
+
 
 
     class shutDownTask extends TimerTask {

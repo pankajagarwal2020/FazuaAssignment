@@ -3,7 +3,6 @@ package com.fazua.system.productionline;
 import com.google.common.base.Preconditions;
 
 import java.util.Random;
-import java.util.TimerTask;
 
 public class Motor implements Validation16BitsShortSerialNumber {
 
@@ -21,7 +20,7 @@ public class Motor implements Validation16BitsShortSerialNumber {
 
     public Motor(short motorSerialNumber) {
 
-        validateSpecification(motorSerialNumber);
+        validate16bitSpecification(motorSerialNumber);
         this.motorSerialNumber = motorSerialNumber;
         this.state = State.OFF;
 
@@ -108,7 +107,7 @@ public class Motor implements Validation16BitsShortSerialNumber {
     }
 
     @Override
-    public boolean validateSpecification(short serialNumber) {
+    public boolean validate16bitSpecification(short serialNumber) {
         Preconditions.checkArgument(serialNumber > 0 && serialNumber < Short.MAX_VALUE ,
                 "Simulation cannot be started as Motor serial number  provided is not a positive 16 bit value ");
 
