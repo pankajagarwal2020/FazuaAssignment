@@ -1,29 +1,47 @@
 package com.fazua.system.tests;
 
 
-import com.fazua.system.productionline.BottomBracket;
-import com.fazua.system.productionline.DrivePack;
-import com.fazua.system.productionline.Motor;
-import com.fazua.system.productionline.Remote;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.fazua.system.productionline.*;
+import org.junit.jupiter.api.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class EvationDriveSystemTest {
 
+
     Remote remote;
     Motor motor;
-    BottomBracket bracket;
+    BottomBracket bottomBracket;
     DrivePack drivePack;
+    int remoteSno = 1;
+    short remoteHMISerialNo = 1;
+    short motorSerialNumber = 2;
+    int bottomBracketSno = 3;
+    String bottomBracketTorqueSensor = "abc";
+    int drivePackSno = 4;
+    double drivePackSoftwareVersion = 4.19;
+    boolean isTorqueSensorSerialAscii;
+    boolean isTorqueSensorSerialAscii12Digits;
+    String torqueSensorInASCII;
 
     @BeforeEach
     void init(){
 
-        remote = new Remote(1,(short)1);
-        motor = new Motor((short)1);
-        bracket = new BottomBracket(1,"abc12");
-        drivePack = new DrivePack(1,4.19);
+        remote = new Remote(remoteSno,remoteHMISerialNo);
+        motor = new Motor(motorSerialNumber);
+        bottomBracket = new BottomBracket(bottomBracketSno,bottomBracketTorqueSensor);
+        drivePack = new DrivePack(drivePackSno,drivePackSoftwareVersion);
+
     }
+
+
 
     @Test
     void testRemoteSpecifications(){
@@ -65,19 +83,19 @@ public class EvationDriveSystemTest {
     @Test
     void testBottomBracketSpecifications(){
 
-        assertThrows(IllegalArgumentException.class,()->bracket.validate32bitSpecification(-1),
+        assertThrows(IllegalArgumentException.class,()->bottomBracket.validate32bitSpecification(-1),
                 "Negative bracket serial throws exception");
 
-        assertThrows(IllegalArgumentException.class,()->bracket.validate32bitSpecification(0),
+        assertThrows(IllegalArgumentException.class,()->bottomBracket.validate32bitSpecification(0),
                 "zero as bracket serial throws exception");
-        assertThrows(IllegalArgumentException.class,()->bracket.validate32bitSpecification(Integer.MAX_VALUE + 1),
+        assertThrows(IllegalArgumentException.class,()->bottomBracket.validate32bitSpecification(Integer.MAX_VALUE + 1),
                 "Anything that exceeds Integer max for bracket serial value throws exception");
 
 
-        assertThrows(IllegalArgumentException.class,()->bracket.validateTorqueSerialNumber("€€abc12"),
+        assertThrows(IllegalArgumentException.class,()->bottomBracket.validateTorqueSerialNumber("€€abc12"),
                 "Torque serial number cannot be converted to ASCII");
 
-        assertThrows(IllegalArgumentException.class,()->bracket.validateTorqueSerialNumber("abcdef123"),
+        assertThrows(IllegalArgumentException.class,()->bottomBracket.validateTorqueSerialNumber("abcdef123"),
                 "Torque serial number needs to be within 12 digits");
 
 
@@ -104,7 +122,9 @@ public class EvationDriveSystemTest {
     @Test
     void testMotorRunOutput(){
 
-        fail("yet to be implemented");
+        int motorPower = motor.runMotor(SupportLevel.WHITE);
+        System.out.println("motorPower = " + motorPower);
+        assertEquals(motorPower > 85 && motorPower < 140, true, "Evation Drive System Failed ");
     }
 
 

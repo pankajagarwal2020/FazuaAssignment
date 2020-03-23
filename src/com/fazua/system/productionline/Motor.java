@@ -57,6 +57,12 @@ public class Motor implements Validation16BitsShortSerialNumber {
 
         setFactor(level);
 
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         motorPower = motorPower(Constants.MINIMUM_POWER,Constants.MAXIMUM_POWER);
 
         return motorPower;

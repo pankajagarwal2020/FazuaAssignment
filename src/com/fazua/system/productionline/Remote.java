@@ -43,8 +43,13 @@ public class Remote implements EvationDriveSystem, Validation32BitsIntegerSerial
 
         this.state = State.ON;
 
-        drivePack.activate();
+        //activateEvationSystem();
 
+    }
+
+    @Override
+    public void activateEvationSystem() {
+        drivePack.activate();
     }
 
     @Override

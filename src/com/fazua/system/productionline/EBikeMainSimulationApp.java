@@ -2,7 +2,7 @@ package com.fazua.system.productionline;
 
 import java.util.Scanner;
 
-public class eBikeMainSimulationApp {
+public class EBikeMainSimulationApp {
 
 
     public static void main(String[] args) throws InterruptedException {
@@ -20,12 +20,14 @@ public class eBikeMainSimulationApp {
         EvationDriveSystem remote = new Remote(remoteSno,remoteHMISerialNo);
 
         remote.on();
+        remote.activateEvationSystem();
 
         remote.increaseSupportLevel();
         //remote.on();
         remote.off();
 
     }
+
 
 
 

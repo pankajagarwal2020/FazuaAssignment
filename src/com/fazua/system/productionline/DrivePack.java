@@ -65,11 +65,6 @@ public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSo
         System.out.println("Motor current state :" + motor.getState());
         System.out.println();
 
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         System.out.println(" *** OUTPUT RESULT ****");
         System.out.println();
@@ -77,13 +72,21 @@ public class DrivePack implements Validation32BitsIntegerSerialNumber,ValidateSo
         System.out.println("Motor power generated : " + motorPower);
         System.out.println();
 
+        motorPowerOutputTest(motorPower);
+
+
+    }
+
+    public void motorPowerOutputTest(int motorPower) {
         if(motorPower > 85 && motorPower < 140){
 
             System.out.println("Evation Drive System Test Passed");
+
         }
         else{
 
             System.out.println("Evation Drive System Test Failed");
+
         }
 
         System.out.println();
